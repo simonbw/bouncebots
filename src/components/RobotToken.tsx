@@ -40,7 +40,7 @@ export function RobotToken({
         r={SIZE * 0.3}
         className={classNames(
           isSelected ? "scale-110" : "",
-          "hover:scale-125 transition-all drop-shadow-sm hover:drop-shadow-md stroke-[0.1] stroke-white"
+          "hover:scale-125 active:scale-[135%] transition-all drop-shadow-sm hover:drop-shadow-md stroke-[0.1] stroke-white"
         )}
       />
 
@@ -74,7 +74,6 @@ export function RobotToken({
 
 function Arrow({
   enabled,
-  color,
   direction,
   onClick,
 }: {

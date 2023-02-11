@@ -15,7 +15,7 @@ export function Hourglass() {
   const hourglassPath = `M 0 0 L 0 100 L 48 150 L 0 200 L 0 300 L 100 300 L 100 200 L 52 150 L 100 100 L 100 0 Z`;
 
   return (
-    <div className="p-2">
+    <div className="p-2 flex flex-col gap-4">
       <svg
         shapeRendering="geometricPrecision"
         viewBox="0 0 100 300"
@@ -23,8 +23,6 @@ export function Hourglass() {
           setFlipped(!flipped);
           startTimer();
         }}
-        width={100}
-        height={400}
         className={classNames(
           "inline-block cursor-pointer hover:scale-105 active:scale-110 transition-transform origin-center",
           flipped ? "rotate-180" : ""

@@ -13,7 +13,7 @@ import { MoveList } from "./MoveList";
 import { RobotStartToken } from "./RobotStartToken";
 import { RobotToken } from "./RobotToken";
 import { useGame } from "./useGame";
-import { useDocumentClick, useKeyDown } from "./useKeyDown";
+import { useKeyboardShortcuts } from "./useKeyboardShortcuts";
 
 export function GameRenderer() {
   const { game, addMove, undoMove } = useGame();
@@ -29,7 +29,7 @@ export function GameRenderer() {
         "w-full min-h-full flex justify-center gap-4 p-4 bg-gray-200 overflow-hidden flex-col md:flex-row md:max-h-screen md:h-screen"
       }
     >
-      <div className="flex flex-col justify-center">
+      <div className="flex flex-col justify-center max-md:order-10">
         <Hourglass />
       </div>
 
@@ -99,38 +99,4 @@ function ShareBox() {
       </Button>
     </a>
   );
-}
-
-function useKeyboardShortcuts(
-  selected: RobotId | null,
-  setSelected: (robotId: RobotId | null) => void
-) {
-  const { addMove, undoMove } = useGame();
-
-  useKeyDown((event) => {
-    if (event.key == "Escape") {
-      setSelected(null);
-    }
-
-    if (event.key == "ArrowRight" && selected != null) {
-      addMove({ robot: selected, direction: "right" });
-    }
-    if (event.key == "ArrowLeft" && selected != null) {
-      addMove({ robot: selected, direction: "left" });
-    }
-    if (event.key == "ArrowUp" && selected != null) {
-      addMove({ robot: selected, direction: "up" });
-    }
-    if (event.key == "ArrowDown" && selected != null) {
-      addMove({ robot: selected, direction: "down" });
-    }
-
-    if (event.key == "z" && (event.ctrlKey || event.metaKey)) {
-      undoMove();
-    }
-  });
-
-  useDocumentClick(() => {
-    setSelected(null);
-  });
 }

@@ -1,5 +1,5 @@
 import React, { Fragment } from "react";
-import { Cell } from "../grid";
+import { Cell } from "../game/grid";
 import { classNames } from "./classNames";
 import { SIZE, SPACING } from "./Grid";
 import { robotToColor } from "./robotRenderUtils";
@@ -29,8 +29,8 @@ export function GridCell({
         <g
           transform={`translate(${(i + 0.5) * SIZE}, ${(j + 0.5) * SIZE})`}
           className={classNames(
-            "transition-all",
-            isGoal ? "" : "opacity-25 grayscale-[25%]"
+            "transition-all duration-500",
+            isGoal ? "" : "opacity-0 grayscale-[25%]"
           )}
         >
           <rect
