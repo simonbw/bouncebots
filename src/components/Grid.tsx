@@ -4,7 +4,7 @@ import { useGame } from "./useGame";
 
 export const SPACING = 0.1;
 export const SIZE = 10;
-export const PADDING = 1;
+export const WALL_THICKNESS = 1.2;
 
 interface GridProps {
   children: React.ReactNode;
@@ -18,11 +18,11 @@ export function Grid({ children, onClick }: GridProps) {
 
   return (
     <svg
-      viewBox={`${-PADDING} ${-PADDING} ${
-        grid.cells.length * SIZE + 2 * PADDING
-      } ${grid.cells[0].length * SIZE + 2 * PADDING}`}
-      style={{ flexGrow: 0 }}
+      viewBox={`${-WALL_THICKNESS / 2} ${-WALL_THICKNESS / 2} ${
+        grid.cells.length * SIZE + WALL_THICKNESS
+      } ${grid.cells[0].length * SIZE + WALL_THICKNESS}`}
       onClick={onClick}
+      className="flex-grow-0 shadow-md"
     >
       {grid.cells.map((row, i) =>
         row.map((cell, j) => (

@@ -8,7 +8,7 @@ export function MoveList({}: {}) {
   const { clearMoves, undoMove, game, newGoal } = useGame();
 
   return (
-    <div className="bg-gray-50 p-4 rounded shadow-md flex-grow overflow-auto flex flex-col w-full">
+    <div className="bg-gray-50 p-4 rounded shadow-md flex-grow overflow-auto flex flex-col w-full min-w-48">
       <h2 className="text-2xl font-bold">Moves</h2>
       <div className="space-x-2">
         <Button onClick={() => clearMoves()}>Reset</Button>
@@ -44,7 +44,8 @@ export function MoveList({}: {}) {
       </ol>
       {isGameSolved(game) && (
         <div className="text-lg font-bold">
-          Solved in {game.moves.length} moves!
+          Solved in {game.moves.length}{" "}
+          {game.moves.length === 1 ? "move" : "moves"}!
         </div>
       )}
 

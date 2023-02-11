@@ -83,11 +83,11 @@ function Arrow({
   direction: Direction;
   onClick: () => void;
 }) {
-  const r1 = -SIZE * 0.4;
-  const r2 = -SIZE * 0.7;
-  const r3 = -SIZE * 1;
-  const w1 = 1;
-  const w2 = 2.7;
+  const r1 = -SIZE * 0.5;
+  const r2 = -SIZE * 1.0;
+  const r3 = -SIZE * 1.3;
+  const w1 = 1.2;
+  const w2 = 3.2;
   return (
     <g transform={`rotate(${directionToRotation(direction)})`}>
       <g
@@ -101,6 +101,11 @@ function Arrow({
         )}
         aria-label={`Move ${direction}`}
       >
+        {/* Invisible one for bigger hitbox */}
+        <polygon
+          points={`${-w1},${r1} ${-w1},${r2} ${-w2},${r2} 0,${r3} ${w2},${r2} ${w1},${r2} ${w1},${r1}`}
+          className="fill-transparent stroke-[3] stroke-transparent"
+        />
         <polygon
           points={`${-w1},${r1} ${-w1},${r2} ${-w2},${r2} 0,${r3} ${w2},${r2} ${w1},${r2} ${w1},${r1}`}
           className="fill-white stroke-[0.25] stroke-gray-500"
@@ -120,5 +125,7 @@ function directionToRotation(direction: Direction): number {
       return 180;
     case "left":
       return 270;
+    default:
+      throw new Error("invalid direction: " + direction);
   }
 }
