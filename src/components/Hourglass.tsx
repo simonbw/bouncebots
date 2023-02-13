@@ -12,13 +12,47 @@ export function Hourglass() {
 
   const [flipped, setFlipped] = useState(false);
 
-  const hourglassPath = `M 0 0 L 0 100 L 48 150 L 0 200 L 0 300 L 100 300 L 100 200 L 52 150 L 100 100 L 100 0 Z`;
+  const yMax = 250;
+  const yMid = yMax / 2;
+  const y1 = 2;
+  const y2 = yMid - 60;
+  const y3 = yMid - 25;
+  const y4 = yMid - 5;
+  const y5 = yMid + 5;
+  const y6 = yMid + 25;
+  const y7 = yMid + 60;
+  const y8 = yMax - y1;
+
+  const xMax = 100;
+  const xMid = xMax / 2;
+  const x1 = xMid - 10;
+  const x2 = xMid + 10;
+  const xc1 = xMid - 2;
+  const xc2 = xMid + 2;
+
+  const glassThickness = 3;
+  const sandHeight = yMid - 10 - glassThickness;
+
+  const hourglassPath =
+    `M 0 0 ` +
+    `L 0 ${y1} ` +
+    `C 0 ${y2} 0 ${y3} ${x1} ${y4} ` +
+    `C ${xc1} ${yMid} ${xc1} ${yMid} ${x1} ${y5} ` +
+    `C 0 ${y6} 0 ${y7} 0 ${y8} ` +
+    `L 0 ${yMax} ` +
+    `L ${xMax} ${yMax} ` + // bottom line
+    `L ${xMax} ${y8} ` +
+    `C ${xMax} ${y7} ${xMax} ${y6} ${x2} ${y5} ` +
+    `C ${xc2} ${yMid} ${xc2} ${yMid} ${x2} ${y4} ` +
+    `C ${xMax} ${y3} ${xMax} ${y2} ${xMax} ${y1} ` +
+    `L ${xMax} 0 ` +
+    `Z`;
 
   return (
     <div className="p-2 flex flex-col gap-4">
       <svg
         shapeRendering="geometricPrecision"
-        viewBox="0 0 100 300"
+        viewBox={`0 0 ${xMax} ${yMax}`}
         onClick={() => {
           setFlipped(!flipped);
           startTimer();
@@ -34,7 +68,7 @@ export function Hourglass() {
               d={hourglassPath}
               fill={"white"}
               stroke="black"
-              strokeWidth={5}
+              strokeWidth={glassThickness * 2}
             />
           </mask>
 
@@ -42,25 +76,29 @@ export function Hourglass() {
 
           <rect
             x={0}
-            y={lerp(1, 150, 1 - percentRemaining)}
-            width={100}
-            height={lerp(0, 140, percentRemaining)}
+            y={lerp(yMid - sandHeight, yMid, 1 - percentRemaining)}
+            width={xMax}
+            height={lerp(0, sandHeight, percentRemaining)}
             mask="url(#hourglass)"
             className="stroke-none fill-orange-300"
           />
           <rect
             x={0}
-            y={lerp(160, 300, percentRemaining)}
-            height={lerp(0, 140, 1 - percentRemaining)}
-            width={100}
+            y={lerp(
+              yMax - glassThickness - sandHeight,
+              yMax - glassThickness,
+              percentRemaining
+            )}
+            height={lerp(0, sandHeight, 1 - percentRemaining)}
+            width={xMax}
             mask="url(#hourglass)"
             className="stroke-none fill-orange-300"
           />
           <line
-            x1={50}
-            y1={150}
-            x2={50}
-            y2={300}
+            x1={xMid}
+            y1={yMid}
+            x2={xMid}
+            y2={yMax}
             mask="url(#hourglass)"
             className={classNames(
               "stroke-orange-300 transition-all duration-500",
