@@ -49,64 +49,69 @@ export function Hourglass() {
     `Z`;
 
   return (
-    <div className="p-2 flex flex-col gap-4">
-      <svg
-        shapeRendering="geometricPrecision"
-        viewBox={`0 0 ${xMax} ${yMax}`}
-        onClick={() => {
-          setFlipped(!flipped);
-          startTimer();
-        }}
-        className={classNames(
-          "inline-block cursor-pointer hover:scale-105 active:scale-110 transition-transform origin-center",
-          flipped ? "rotate-180" : ""
-        )}
-      >
-        <g className={classNames("origin-center", flipped ? "rotate-180" : "")}>
-          <mask id="hourglass" maskUnits="userSpaceOnUse">
-            <path
-              d={hourglassPath}
-              fill={"white"}
-              stroke="black"
-              strokeWidth={glassThickness * 2}
+    <div className="p-4 flex flex-col gap-4">
+      <div className={"drop-shadow-md hover:drop-shadow-lg"}>
+        <svg
+          shapeRendering="geometricPrecision"
+          viewBox={`0 0 ${xMax} ${yMax}`}
+          onClick={() => {
+            setFlipped(!flipped);
+            startTimer();
+          }}
+          className={classNames(
+            "group inline-block cursor-pointer transition-all origin-center",
+            "hover:scale-105 active:scale-110",
+            flipped ? "rotate-180" : ""
+          )}
+        >
+          <g
+            className={classNames("origin-center", flipped ? "rotate-180" : "")}
+          >
+            <mask id="hourglass" maskUnits="userSpaceOnUse">
+              <path
+                d={hourglassPath}
+                fill={"white"}
+                stroke="black"
+                strokeWidth={glassThickness * 2}
+              />
+            </mask>
+
+            <path d={hourglassPath} className="stroke-none fill-white" />
+
+            <rect
+              x={0}
+              y={lerp(yMid - sandHeight, yMid, 1 - percentRemaining)}
+              width={xMax}
+              height={lerp(0, sandHeight, percentRemaining)}
+              mask="url(#hourglass)"
+              className="stroke-none fill-orange-300"
             />
-          </mask>
-
-          <path d={hourglassPath} className="stroke-none fill-white" />
-
-          <rect
-            x={0}
-            y={lerp(yMid - sandHeight, yMid, 1 - percentRemaining)}
-            width={xMax}
-            height={lerp(0, sandHeight, percentRemaining)}
-            mask="url(#hourglass)"
-            className="stroke-none fill-orange-300"
-          />
-          <rect
-            x={0}
-            y={lerp(
-              yMax - glassThickness - sandHeight,
-              yMax - glassThickness,
-              percentRemaining
-            )}
-            height={lerp(0, sandHeight, 1 - percentRemaining)}
-            width={xMax}
-            mask="url(#hourglass)"
-            className="stroke-none fill-orange-300"
-          />
-          <line
-            x1={xMid}
-            y1={yMid}
-            x2={xMid}
-            y2={yMax}
-            mask="url(#hourglass)"
-            className={classNames(
-              "stroke-orange-300 transition-all duration-500",
-              timeRemaining > 0.4 ? "stroke-[3]" : "stroke-0"
-            )}
-          />
-        </g>
-      </svg>
+            <rect
+              x={0}
+              y={lerp(
+                yMax - glassThickness - sandHeight,
+                yMax - glassThickness,
+                percentRemaining
+              )}
+              height={lerp(0, sandHeight, 1 - percentRemaining)}
+              width={xMax}
+              mask="url(#hourglass)"
+              className="stroke-none fill-orange-300"
+            />
+            <line
+              x1={xMid}
+              y1={yMid}
+              x2={xMid}
+              y2={yMax}
+              mask="url(#hourglass)"
+              className={classNames(
+                "stroke-orange-300 transition-all duration-500",
+                timeRemaining > 0.4 ? "stroke-[3]" : "stroke-0"
+              )}
+            />
+          </g>
+        </svg>
+      </div>
 
       <label className="block text-gray-700 text-xs">
         <div className="flex items-end">

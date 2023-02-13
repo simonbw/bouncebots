@@ -5,35 +5,38 @@ import { directionToArrow, robotToColor } from "./robotRenderUtils";
 import { useGame } from "./useGame";
 
 export function MoveList({}: {}) {
-  const { clearMoves, undoMove, game, newGoal } = useGame();
+  const { clearMoves, undoMove, game } = useGame();
 
   return (
-    <div className="bg-gray-50 p-4 rounded shadow-md flex-grow overflow-auto flex flex-col w-full min-w-48">
+    <div className="bg-gray-50 p-4 rounded shadow-md overflow-auto flex flex-col w-full min-w-48">
       <h2 className="text-2xl font-bold">Moves</h2>
       <div className="flex gap-2">
-        <Button
-          className="flex-grow"
-          onClick={() => clearMoves()}
-          title="Rest Moves [R]"
-        >
-          Reset
-        </Button>
         <Button
           className="flex-grow"
           title="Undo [⌘+Z]"
           disabled={game.moves.length == 0}
           onClick={() => undoMove()}
+          kind="full"
         >
           Undo
         </Button>
+        <Button
+          className="flex-grow"
+          onClick={() => clearMoves()}
+          disabled={game.moves.length == 0}
+          title="Rest Moves [R]"
+          kind="full"
+        >
+          Reset
+        </Button>
       </div>
 
-      {game.moves.length == 0 && (
-        <div className="py-2 text-gray-600 italic text-sm text-center">
-          No moves yet
-        </div>
-      )}
-      <ol className="py-2 overflow-auto flex-grow flex flex-row flex-wrap gap-1 md:flex-col md:flex-nowrap items-start">
+      <ol className="py-2 overflow-auto grid flex-wrap gap-1 grid-cols-2 items-start">
+        {game.moves.length == 0 && (
+          <li className="py-1 text-gray-600 italic text-sm text-center col-span-2">
+            No moves yet
+          </li>
+        )}
         {game.moves.map((move, i) => (
           <li
             key={i}
@@ -60,10 +63,6 @@ export function MoveList({}: {}) {
           {game.moves.length === 1 ? "move" : "moves"}!
         </div>
       )}
-
-      <Button block onClick={() => newGoal()} color="primary" kind="full">
-        New Goal
-      </Button>
     </div>
   );
 }

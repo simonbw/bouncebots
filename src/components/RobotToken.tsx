@@ -1,29 +1,25 @@
 import React from "react";
-import { Direction, Move, RobotId } from "../game-model";
+import { Direction, RobotId } from "../game-model";
+import { canAddMove, getCurrentPositions } from "../game/game-helpers";
 import { classNames } from "./classNames";
 import { SIZE } from "./Grid";
 import { robotToColor } from "./robotRenderUtils";
+import { useGame } from "./useGame";
 
 /**
  * Marks where a robot is right now.
  */
 export function RobotToken({
   robotId,
-  x,
-  y,
   isSelected,
-  addMove,
   select,
-  canMoveDirection,
 }: {
   robotId: RobotId;
-  x: number;
-  y: number;
   isSelected: boolean;
-  addMove: (move: Move) => void;
   select: () => void;
-  canMoveDirection: (direction: Direction) => boolean;
 }) {
+  const { addMove, game } = useGame();
+  const [x, y] = getCurrentPositions(game)![robotId];
   return (
     <g
       transform={`translate(${(x + 0.5) * SIZE},${(y + 0.5) * SIZE})`}
@@ -40,30 +36,38 @@ export function RobotToken({
         r={SIZE * 0.3}
         className={classNames(
           isSelected ? "scale-110" : "",
-          "hover:scale-125 active:scale-[135%] transition-all drop-shadow-sm hover:drop-shadow-md stroke-[0.1] stroke-white"
+          "hover:scale-125 active:scale-[135%] transition-all drop-shadow-svg-sm hover:drop-shadow-svg-md stroke-[0.1] stroke-white"
         )}
       />
 
       <Arrow
-        enabled={isSelected && canMoveDirection("up")}
+        enabled={
+          isSelected && canAddMove(game, { robot: robotId, direction: "up" })
+        }
         direction="up"
         color={robotToColor(robotId)}
         onClick={() => addMove({ robot: robotId, direction: "up" })}
       />
       <Arrow
-        enabled={isSelected && canMoveDirection("right")}
+        enabled={
+          isSelected && canAddMove(game, { robot: robotId, direction: "right" })
+        }
         direction="right"
         color={robotToColor(robotId)}
         onClick={() => addMove({ robot: robotId, direction: "right" })}
       />
       <Arrow
-        enabled={isSelected && canMoveDirection("down")}
+        enabled={
+          isSelected && canAddMove(game, { robot: robotId, direction: "down" })
+        }
         direction="down"
         color={robotToColor(robotId)}
         onClick={() => addMove({ robot: robotId, direction: "down" })}
       />
       <Arrow
-        enabled={isSelected && canMoveDirection("left")}
+        enabled={
+          isSelected && canAddMove(game, { robot: robotId, direction: "left" })
+        }
         direction="left"
         color={robotToColor(robotId)}
         onClick={() => addMove({ robot: robotId, direction: "left" })}
@@ -93,7 +97,7 @@ function Arrow({
         onClick={enabled ? onClick : undefined}
         tabIndex={enabled ? 0 : undefined}
         className={classNames(
-          "drop-shadow-sm transition-all",
+          "drop-shadow-svg-sm transition-all",
           "hover:scale-110 focus:scale-110 active:scale-125",
           "outline-none active:ouline-none focus:outline-none",
           enabled ? "opacity-100" : "opacity-0 pointer-events-none"

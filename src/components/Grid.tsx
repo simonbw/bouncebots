@@ -22,7 +22,7 @@ export function Grid({ children, onClick }: GridProps) {
         grid.cells.length * SIZE + WALL_THICKNESS
       } ${grid.cells[0].length * SIZE + WALL_THICKNESS}`}
       onClick={onClick}
-      className="flex-grow-0 shadow-md"
+      className="flex-grow-0 shadow-md max-h-full max-w-full"
     >
       {grid.cells.map((row, i) =>
         row.map((cell, j) => (

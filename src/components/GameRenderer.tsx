@@ -1,22 +1,20 @@
 import React, { useState } from "react";
-import {
-  canAddMove,
-  getCurrentGoalSeed,
-  getCurrentPositions,
-} from "../game/game-helpers";
-import { RobotId } from "../game/game-model";
+import { canAddMove, getCurrentPositions } from "../game/game-helpers";
+import { RobotId, ROBOT_IDS } from "../game/game-model";
 import { Button } from "./Button";
 import { GithubIcon } from "./GithubIcon";
 import { Grid } from "./Grid";
 import { Hourglass } from "./Hourglass";
+import { HowToPlay } from "./HowToPlay";
 import { MoveList } from "./MoveList";
 import { RobotStartToken } from "./RobotStartToken";
 import { RobotToken } from "./RobotToken";
+import { ShareBox } from "./ShareBox";
 import { useGame } from "./useGame";
 import { useKeyboardShortcuts } from "./useKeyboardShortcuts";
 
 export function GameRenderer() {
-  const { game, addMove, undoMove } = useGame();
+  const { game, newGoal } = useGame();
   const { startPositions } = game;
   const currentPositions = getCurrentPositions(game);
 
@@ -43,27 +41,31 @@ export function GameRenderer() {
           />
         ))}
 
-        {Object.entries(currentPositions).map(([robot, [x, y]]) => (
+        {ROBOT_IDS.map((robot) => (
           <RobotToken
             key={robot}
-            robotId={robot as RobotId}
-            x={x}
-            y={y}
-            addMove={addMove}
+            robotId={robot}
             isSelected={selected == robot}
-            select={() => setSelected(robot as RobotId)}
-            canMoveDirection={(direction) =>
-              canAddMove(game, { robot: robot as RobotId, direction })
-            }
+            select={() => setSelected(robot)}
           />
         ))}
       </Grid>
 
       <div className="flex flex-col gap-4 h-full max-h-full">
         <MoveList />
+        <Button
+          block
+          onClick={() => newGoal()}
+          color="primary"
+          kind="full"
+          className="flex-shrink-0 shadow-md"
+        >
+          New Goal
+        </Button>
         {/* TODO: Put SolutionPanel back in when solver doesn't crash page */}
         {/* <SolutionPanel /> */}
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col items-end">
+          <HowToPlay />
           <ShareBox />
           <a
             href="https://github.com/simonbw/bouncebots"
@@ -77,26 +79,5 @@ export function GameRenderer() {
         </div>
       </div>
     </div>
-  );
-}
-
-function ShareBox() {
-  const { game } = useGame();
-
-  const params = new URLSearchParams();
-  params.append("seed", String(game.seed));
-  const goalSeed = getCurrentGoalSeed(game);
-  if (goalSeed) {
-    params.append("goal", String(goalSeed));
-  }
-
-  const url = window.location.pathname + "?" + params.toString();
-
-  return (
-    <a href={url}>
-      <Button block className="w-full" kind="text">
-        Permalink to this puzzle
-      </Button>
-    </a>
   );
 }
