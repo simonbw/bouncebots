@@ -1,15 +1,15 @@
 import React from "react";
-import { Direction, RobotId } from "../game-model";
+import { Direction, RobotId } from "../game/game-model";
 import { canAddMove, getCurrentPositions } from "../game/game-helpers";
 import { classNames } from "./classNames";
 import { SIZE } from "./Grid";
-import { robotToColor } from "./robotRenderUtils";
+import { robotToColor } from "../utility/robotRenderUtils";
 import { useGame } from "./useGame";
 
 /**
  * Marks where a robot is right now.
  */
-export function RobotToken({
+export const RobotToken = React.memo(function RobotToken({
   robotId,
   isSelected,
   select,
@@ -20,15 +20,37 @@ export function RobotToken({
 }) {
   const { addMove, game } = useGame();
   const [x, y] = getCurrentPositions(game)![robotId];
+
+  const handleClick = React.useCallback(
+    (event: React.MouseEvent) => {
+      select();
+      event.preventDefault();
+      event.stopPropagation();
+    },
+    [select]
+  );
+
+  const handleMoveUp = React.useCallback(() => {
+    addMove({ robot: robotId, direction: "up" });
+  }, [robotId, addMove]);
+
+  const handleMoveRight = React.useCallback(() => {
+    addMove({ robot: robotId, direction: "right" });
+  }, [robotId, addMove]);
+
+  const handleMoveDown = React.useCallback(() => {
+    addMove({ robot: robotId, direction: "down" });
+  }, [robotId, addMove]);
+
+  const handleMoveLeft = React.useCallback(() => {
+    addMove({ robot: robotId, direction: "left" });
+  }, [robotId, addMove]);
+
   return (
     <g
       transform={`translate(${(x + 0.5) * SIZE},${(y + 0.5) * SIZE})`}
       className="cursor-pointer transition-all"
-      onClick={(event) => {
-        select();
-        event.preventDefault();
-        event.stopPropagation();
-      }}
+      onClick={handleClick}
     >
       <circle
         key={robotId}
@@ -40,41 +62,25 @@ export function RobotToken({
         )}
       />
 
-      <Arrow
-        enabled={
-          isSelected && canAddMove(game, { robot: robotId, direction: "up" })
-        }
-        direction="up"
-        color={robotToColor(robotId)}
-        onClick={() => addMove({ robot: robotId, direction: "up" })}
-      />
-      <Arrow
-        enabled={
-          isSelected && canAddMove(game, { robot: robotId, direction: "right" })
-        }
-        direction="right"
-        color={robotToColor(robotId)}
-        onClick={() => addMove({ robot: robotId, direction: "right" })}
-      />
-      <Arrow
-        enabled={
-          isSelected && canAddMove(game, { robot: robotId, direction: "down" })
-        }
-        direction="down"
-        color={robotToColor(robotId)}
-        onClick={() => addMove({ robot: robotId, direction: "down" })}
-      />
-      <Arrow
-        enabled={
-          isSelected && canAddMove(game, { robot: robotId, direction: "left" })
-        }
-        direction="left"
-        color={robotToColor(robotId)}
-        onClick={() => addMove({ robot: robotId, direction: "left" })}
-      />
+      {[
+        { direction: "up" as const, handler: handleMoveUp },
+        { direction: "right" as const, handler: handleMoveRight },
+        { direction: "down" as const, handler: handleMoveDown },
+        { direction: "left" as const, handler: handleMoveLeft },
+      ].map(({ direction, handler }) => (
+        <Arrow
+          key={direction}
+          enabled={
+            isSelected && canAddMove(game, { robot: robotId, direction })
+          }
+          direction={direction}
+          color={robotToColor(robotId)}
+          onClick={handler}
+        />
+      ))}
     </g>
   );
-}
+});
 
 function Arrow({
   enabled,

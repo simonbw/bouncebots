@@ -21,6 +21,10 @@ export function GameRenderer() {
   const [selected, setSelected] = useState<RobotId | null>(null);
   useKeyboardShortcuts(selected, setSelected);
 
+  const handleSelectRobot = React.useCallback((robot: RobotId) => {
+    setSelected(robot);
+  }, []);
+
   return (
     <div
       className={
@@ -46,7 +50,7 @@ export function GameRenderer() {
             key={robot}
             robotId={robot}
             isSelected={selected == robot}
-            select={() => setSelected(robot)}
+            select={() => handleSelectRobot(robot)}
           />
         ))}
       </Grid>

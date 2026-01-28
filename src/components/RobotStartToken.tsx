@@ -1,12 +1,12 @@
 import React from "react";
-import { RobotId } from "../game-model";
+import { RobotId } from "../game/game-model";
 import { SIZE } from "./Grid";
-import { robotToColor } from "./robotRenderUtils";
+import { robotToColor } from "../utility/robotRenderUtils";
 
 /**
  * Marks where a robot starts at the beginning of the turn
  */
-export function RobotStartToken({
+export const RobotStartToken = React.memo(function RobotStartToken({
   robotId,
   x,
   y,
@@ -24,4 +24,4 @@ export function RobotStartToken({
       r={SIZE * 0.35}
     />
   );
-}
+});

@@ -1,6 +1,6 @@
 export function memoize<K, V>(
   f: (p: K) => V,
-  getKey: (p: K) => any = (arg) => arg
+  getKey: (p: K) => any = (arg) => arg,
 ): (p: K) => V {
   const answers = new Map<K, V>();
 
@@ -9,7 +9,7 @@ export function memoize<K, V>(
     if (!answers.has(key)) {
       answers.set(key, f(arg));
     }
-    return answers.get(arg)!;
+    return answers.get(key)!;
   };
 }
 
@@ -36,8 +36,7 @@ class LruCache<K, V> {
   public set(key: K, value: V) {
     if (this.values.size >= this.maxEntries) {
       // least-recently used cache eviction strategy
-      const keyToDelete = this.values.keys().next().value;
-
+      const keyToDelete = this.values.keys().next().value!;
       this.values.delete(keyToDelete);
     }
 

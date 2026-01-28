@@ -2,9 +2,9 @@ import React, { Fragment } from "react";
 import { Cell } from "../game/grid";
 import { classNames } from "./classNames";
 import { SIZE, SPACING } from "./Grid";
-import { robotToColor } from "./robotRenderUtils";
+import { robotToColor } from "../utility/robotRenderUtils";
 
-export function GridCell({
+export const GridCell = React.memo(function GridCell({
   i,
   j,
   cell,
@@ -55,4 +55,4 @@ export function GridCell({
       )}
     </Fragment>
   );
-}
+});

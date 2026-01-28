@@ -1,7 +1,7 @@
 import React from "react";
 import { classNames } from "./classNames";
 
-export function LoadingDots({
+export const LoadingDots = React.memo(function LoadingDots({
   size = "sm",
   color = "bg-white",
   className,
@@ -43,4 +43,4 @@ export function LoadingDots({
       ))}
     </span>
   );
-}
+});
