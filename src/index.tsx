@@ -1,13 +1,8 @@
-import React from "react";
 import { createRoot } from "react-dom/client";
 import { Main } from "./components/Main";
 
-const root = createRoot(document.getElementById("react-container"));
-root.render(<Main />);
+const container = document.getElementById("react-container");
+if (!container) throw new Error("Failed to find the react-container element");
 
-// Live reload
-addEventListener("load", () => {
-  new EventSource("/esbuild").addEventListener("change", () =>
-    location.reload()
-  );
-});
+const root = createRoot(container);
+root.render(<Main />);

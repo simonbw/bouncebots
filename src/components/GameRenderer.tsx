@@ -1,5 +1,4 @@
-import React, { useState } from "react";
-import { canAddMove, getCurrentPositions } from "../game/game-helpers";
+import { useState } from "react";
 import { RobotId, ROBOT_IDS } from "../game/game-model";
 import { Button } from "./Button";
 import { GithubIcon } from "./GithubIcon";
@@ -16,14 +15,9 @@ import { useKeyboardShortcuts } from "./useKeyboardShortcuts";
 export function GameRenderer() {
   const { game, newGoal } = useGame();
   const { startPositions } = game;
-  const currentPositions = getCurrentPositions(game);
 
   const [selected, setSelected] = useState<RobotId | null>(null);
   useKeyboardShortcuts(selected, setSelected);
-
-  const handleSelectRobot = React.useCallback((robot: RobotId) => {
-    setSelected(robot);
-  }, []);
 
   return (
     <div
@@ -50,7 +44,7 @@ export function GameRenderer() {
             key={robot}
             robotId={robot}
             isSelected={selected == robot}
-            select={() => handleSelectRobot(robot)}
+            select={() => setSelected(robot)}
           />
         ))}
       </Grid>

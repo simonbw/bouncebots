@@ -1,33 +1,18 @@
-import React, { useRef } from "react";
+import { useRef } from "react";
 import { Button } from "./Button";
 
 export function HowToPlay() {
   const ref = useRef<HTMLDialogElement>(null);
 
-  const handleOpenModal = React.useCallback(() => {
-    ref.current?.showModal();
-  }, []);
-
-  const handleCloseModal = React.useCallback(() => {
-    ref.current?.close();
-  }, []);
-
-  const handleStopPropagation = React.useCallback(
-    (event: React.MouseEvent) => {
-      event.stopPropagation();
-    },
-    []
-  );
-
   return (
     <div className="">
-      <Button kind="text" onClick={handleOpenModal}>
+      <Button kind="text" onClick={() => ref.current?.showModal()}>
         How To Play
       </Button>
       <dialog
         ref={ref}
         className="rounded-md shadow-lg shadow-gray-900/50 bg-white animate-grow-in w-full max-w-sm overflow-hidden h-full max-h-[100%-16rem] p-0"
-        onClick={handleCloseModal}
+        onClick={() => ref.current?.close()}
       >
         <Button
           color="danger"
@@ -40,7 +25,7 @@ export function HowToPlay() {
         <div
           className="flex flex-col gap-2 p-6 text-gray-800 h-full w-full overflow-auto"
           /* prevent clicks inside from closing */
-          onClick={handleStopPropagation}
+          onClick={(e) => e.stopPropagation()}
         >
           <section>
             <h1 className="text-2xl font-bold">BounceBots</h1>
@@ -98,7 +83,7 @@ export function HowToPlay() {
             </p>
           </section>
           <section>
-            <Button className="float-right" onClick={handleCloseModal}>
+            <Button className="float-right" onClick={() => ref.current?.close()}>
               Close
             </Button>
           </section>

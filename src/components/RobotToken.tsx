@@ -21,36 +21,15 @@ export const RobotToken = React.memo(function RobotToken({
   const { addMove, game } = useGame();
   const [x, y] = getCurrentPositions(game)![robotId];
 
-  const handleClick = React.useCallback(
-    (event: React.MouseEvent) => {
-      select();
-      event.preventDefault();
-      event.stopPropagation();
-    },
-    [select]
-  );
-
-  const handleMoveUp = React.useCallback(() => {
-    addMove({ robot: robotId, direction: "up" });
-  }, [robotId, addMove]);
-
-  const handleMoveRight = React.useCallback(() => {
-    addMove({ robot: robotId, direction: "right" });
-  }, [robotId, addMove]);
-
-  const handleMoveDown = React.useCallback(() => {
-    addMove({ robot: robotId, direction: "down" });
-  }, [robotId, addMove]);
-
-  const handleMoveLeft = React.useCallback(() => {
-    addMove({ robot: robotId, direction: "left" });
-  }, [robotId, addMove]);
-
   return (
     <g
       transform={`translate(${(x + 0.5) * SIZE},${(y + 0.5) * SIZE})`}
       className="cursor-pointer transition-all"
-      onClick={handleClick}
+      onClick={(e) => {
+        select();
+        e.preventDefault();
+        e.stopPropagation();
+      }}
     >
       <circle
         key={robotId}
@@ -63,11 +42,11 @@ export const RobotToken = React.memo(function RobotToken({
       />
 
       {[
-        { direction: "up" as const, handler: handleMoveUp },
-        { direction: "right" as const, handler: handleMoveRight },
-        { direction: "down" as const, handler: handleMoveDown },
-        { direction: "left" as const, handler: handleMoveLeft },
-      ].map(({ direction, handler }) => (
+        { direction: "up" as const },
+        { direction: "right" as const },
+        { direction: "down" as const },
+        { direction: "left" as const },
+      ].map(({ direction }) => (
         <Arrow
           key={direction}
           enabled={
@@ -75,7 +54,7 @@ export const RobotToken = React.memo(function RobotToken({
           }
           direction={direction}
           color={robotToColor(robotId)}
-          onClick={handler}
+          onClick={() => addMove({ robot: robotId, direction })}
         />
       ))}
     </g>
