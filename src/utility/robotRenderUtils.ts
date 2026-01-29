@@ -1,4 +1,4 @@
-import { Direction, RobotId } from "../game-model";
+import { Direction, RobotId } from "../game/game-model";
 
 export function robotToColor(robotId: RobotId): string {
   switch (robotId) {

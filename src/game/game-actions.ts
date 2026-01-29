@@ -1,7 +1,43 @@
 import { mod } from "../utility/MathUtil";
-import { choose } from "../utility/Random";
+import { choose, getGoalSeed, getSeed, seededShuffle } from "../utility/Random";
 import { getGoals } from "./game-helpers";
-import { Game, Move } from "./game-model";
+import { Game, Move, Position, RobotId, ROBOT_IDS } from "./game-model";
+import { Grid, GRID_1 } from "./grid";
+
+function chooseStartPositions(
+  grid: Grid,
+  seed = getSeed()
+): Record<RobotId, Position> {
+  const available: Position[] = [];
+  for (let x = 0; x < grid.cells.length; x++) {
+    for (let y = 0; y < grid.cells[x].length; y++) {
+      if (grid.cells[x][y].type === "EMPTY") {
+        available.push([x, y]);
+      }
+    }
+  }
+
+  seededShuffle(available, seed);
+
+  return {
+    red: available.pop()!,
+    blue: available.pop()!,
+    green: available.pop()!,
+    yellow: available.pop()!,
+  };
+}
+
+export function makeGame(seed = getSeed(), goalSeed = getGoalSeed()): Game {
+  const grid = GRID_1;
+  const game = {
+    grid,
+    startPositions: chooseStartPositions(grid, seed),
+    moves: [],
+    seed,
+  };
+
+  return chooseGoal(game, goalSeed);
+}
 
 export function addMove(game: Game, move: Move): Game {
   const moves = [...game.moves, move];

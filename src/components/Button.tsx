@@ -14,36 +14,36 @@ export type ButtonColor = (typeof ButtonColors)[number];
 export type ButtonKind = (typeof ButtonKinds)[number];
 export type ButtonSize = (typeof ButtonSizes)[number];
 
-const kindClasses: Record<ButtonKind, string> = {
+const kindClasses = {
   full: "button-full",
   flat: "button-flat",
   outline: "button-outline",
   text: "button-text",
-};
+} satisfies Record<ButtonKind, string>;
 
-const disabledKindClasses: Record<ButtonKind, string> = {
+const disabledKindClasses = {
   full: "button-full-disabled",
   flat: "button-flat-disabled",
   outline: "button-outline-disabled",
   text: "button-text-disabled",
-};
+} satisfies Record<ButtonKind, string>;
 
-const sizeClasses: Record<ButtonSize, string> = {
+const sizeClasses = {
   xs: "px-2.5 py-1 text-xs font-medium",
   sm: "px-3 py-1.5 text-xs font-medium",
   md: "px-4 py-1.5 text-sm font-medium",
   lg: "px-6 py-2 text-base font-medium",
   xl: "px-6 py-2 text-lg font-medium",
-};
+} satisfies Record<ButtonSize, string>;
 
-const colorClasses: Record<ButtonColor, string> = {
+const colorClasses = {
   primary: "button-primary",
   secondary: "button-secondary",
   danger: "button-danger",
   white: "button-white",
-};
+} satisfies Record<ButtonColor, string>;
 
-const colorKindClasses: Record<ButtonColor, Record<ButtonKind, string>> = {
+const colorKindClasses = {
   primary: {
     full: "button-primary-full",
     flat: "button-primary-flat",
@@ -68,12 +68,9 @@ const colorKindClasses: Record<ButtonColor, Record<ButtonKind, string>> = {
     outline: "button-white-outline",
     text: "button-white-text",
   },
-};
+} satisfies Record<ButtonColor, Record<ButtonKind, string>>;
 
-const loadingColorKindClasses: Record<
-  ButtonColor,
-  Record<ButtonKind, string>
-> = {
+const loadingColorKindClasses = {
   primary: {
     full: "button-primary-full-loading",
     flat: "button-primary-flat-loading",
@@ -98,7 +95,7 @@ const loadingColorKindClasses: Record<
     outline: "button-white-outline-loading",
     text: "button-white-text-loading",
   },
-};
+} satisfies Record<ButtonColor, Record<ButtonKind, string>>;
 
 export const Button = forwardRef(function ButtonImpl(
   {

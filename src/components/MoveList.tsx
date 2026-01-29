@@ -1,7 +1,7 @@
 import React from "react";
 import { isGameSolved } from "../game/game-helpers";
 import { Button } from "./Button";
-import { directionToArrow, robotToColor } from "./robotRenderUtils";
+import { directionToArrow, robotToColor } from "../utility/robotRenderUtils";
 import { useGame } from "./useGame";
 
 export function MoveList({}: {}) {

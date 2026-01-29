@@ -1,5 +1,3 @@
-import { getGoalSeed, getSeed, seededShuffle } from "../utility/Random";
-import { chooseGoal } from "./game-actions";
 import { Grid, GRID_1 } from "./grid";
 
 export const DIRECTIONS = ["up", "right", "down", "left"] as const;
@@ -27,39 +25,4 @@ export interface Game {
   readonly moves: Move[];
   readonly goal?: Goal;
   readonly seed: number;
-}
-
-export function makeGame(seed = getSeed(), goalSeed = getGoalSeed()): Game {
-  const grid = GRID_1;
-  const game = {
-    grid,
-    startPositions: chooseStartPositions(grid, seed),
-    moves: [],
-    seed,
-  };
-
-  return chooseGoal(game, goalSeed);
-}
-
-function chooseStartPositions(
-  grid: Grid,
-  seed = getSeed()
-): Record<RobotId, Position> {
-  const available: Position[] = [];
-  for (let x = 0; x < grid.cells.length; x++) {
-    for (let y = 0; y < grid.cells[x].length; y++) {
-      if (grid.cells[x][y].type === "EMPTY") {
-        available.push([x, y]);
-      }
-    }
-  }
-
-  seededShuffle(available, seed);
-
-  return {
-    red: available.pop()!,
-    blue: available.pop()!,
-    green: available.pop()!,
-    yellow: available.pop()!,
-  };
 }

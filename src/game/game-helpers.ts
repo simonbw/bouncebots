@@ -38,30 +38,6 @@ export function canAddMove(game: Game, move: Move): boolean {
   );
 }
 
-// TODO: I can probably make this much faster via iteration
-export const getCurrentPositions2 = memoize(
-  (game: Game): Record<RobotId, Position> => {
-    if (game.moves.length == 0) {
-      return game.startPositions;
-    } else {
-      const moves = [...game.moves];
-      const move = moves.pop()!;
-      const lastPositions = getCurrentPositions({ ...game, moves });
-
-      const robot = move.robot;
-      let newPosition = lastPositions[robot].slice() as Position;
-
-      while (
-        canMoveDirection(game.grid, lastPositions, newPosition, move.direction)
-      ) {
-        newPosition = stepDirection(newPosition, move.direction);
-      }
-
-      return { ...lastPositions, [robot]: newPosition };
-    }
-  }
-);
-
 export const getCurrentPositions = memoize(
   (game: Game): Record<RobotId, Position> => {
     const positions = { ...game.startPositions };

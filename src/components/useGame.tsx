@@ -3,6 +3,7 @@ import {
   addMove,
   chooseGoal,
   clearMoves,
+  makeGame,
   undoMove,
 } from "../game/game-actions";
 import {
@@ -10,7 +11,7 @@ import {
   getCurrentPositions,
   isGameSolved,
 } from "../game/game-helpers";
-import { Game, makeGame, Move } from "../game/game-model";
+import { Game, Move } from "../game/game-model";
 
 type GameContextValue = {
   game: Game;
@@ -37,26 +38,29 @@ const GameContextProvider = GameContext.Provider;
 export function GameProvider({ children }: { children: React.ReactNode }) {
   const [game, setGame] = useState(() => makeGame());
 
-  const value = {
-    game,
-    addMove: (move: Move) => {
-      if (canAddMove(game, move)) {
-        setGame((g) => addMove(g, move));
-      }
-    },
-    undoMove: () => setGame((g) => undoMove(g)),
-    clearMoves: () => setGame((g) => clearMoves(g)),
-    newGoal: () =>
-      setGame((g) => {
-        if (isGameSolved(g)) {
-          g = {
-            ...g,
-            startPositions: getCurrentPositions(g),
-          };
+  const value = React.useMemo(
+    () => ({
+      game,
+      addMove: (move: Move) => {
+        if (canAddMove(game, move)) {
+          setGame((g) => addMove(g, move));
         }
-        return chooseGoal(clearMoves(g));
-      }),
-  };
+      },
+      undoMove: () => setGame((g) => undoMove(g)),
+      clearMoves: () => setGame((g) => clearMoves(g)),
+      newGoal: () =>
+        setGame((g) => {
+          if (isGameSolved(g)) {
+            g = {
+              ...g,
+              startPositions: getCurrentPositions(g),
+            };
+          }
+          return chooseGoal(clearMoves(g));
+        }),
+    }),
+    [game]
+  );
 
   return <GameContextProvider value={value}>{children}</GameContextProvider>;
 }

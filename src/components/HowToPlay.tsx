@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import { useRef } from "react";
 import { Button } from "./Button";
 
 export function HowToPlay() {
@@ -25,7 +25,7 @@ export function HowToPlay() {
         <div
           className="flex flex-col gap-2 p-6 text-gray-800 h-full w-full overflow-auto"
           /* prevent clicks inside from closing */
-          onClick={(event) => event.stopPropagation()}
+          onClick={(e) => e.stopPropagation()}
         >
           <section>
             <h1 className="text-2xl font-bold">BounceBots</h1>
@@ -83,10 +83,7 @@ export function HowToPlay() {
             </p>
           </section>
           <section>
-            <Button
-              className="float-right"
-              onClick={() => ref.current?.close()}
-            >
+            <Button className="float-right" onClick={() => ref.current?.close()}>
               Close
             </Button>
           </section>
